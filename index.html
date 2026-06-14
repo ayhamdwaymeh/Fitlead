@@ -21,46 +21,31 @@ color:white;
 overflow-x:hidden;
 }
 
-/* ===== Animated Background ===== */
+/* ===== BACKGROUND ===== */
 .bg{
 position:fixed;
 width:100%;
 height:100%;
-z-index:-1;
+z-index:-2;
 background:radial-gradient(circle at top,#1a0008,#050505);
 }
 
-.glow{
-position:absolute;
-width:600px;
-height:600px;
-background:#ff174f;
-filter:blur(180px);
-opacity:.15;
-border-radius:50%;
-animation:float 8s infinite ease-in-out;
+canvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
 }
 
-.glow:nth-child(2){
-background:#ff0033;
-left:50%;
-top:40%;
-}
-
-@keyframes float{
-0%{transform:translateY(0);}
-50%{transform:translateY(80px);}
-100%{transform:translateY(0);}
-}
-
-/* ===== Container ===== */
+/* ===== HEADER ===== */
 .container{
 width:min(1200px,90%);
 margin:auto;
 position:relative;
 }
 
-/* ===== Header ===== */
 header{
 display:flex;
 justify-content:space-between;
@@ -104,7 +89,6 @@ padding:10px 16px;
 border-radius:12px;
 background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
 font-weight:800;
-box-shadow:0 0 20px rgba(255,0,100,.25);
 }
 
 /* ===== HERO ===== */
@@ -119,7 +103,6 @@ text-align:center;
 .hero h1{
 font-size:clamp(45px,8vw,110px);
 font-weight:900;
-animation:fadeUp 1s ease;
 }
 
 .hero span{
@@ -131,7 +114,6 @@ text-shadow:0 0 25px #ff174f;
 color:#bbb;
 max-width:700px;
 margin:20px auto;
-animation:fadeUp 1.2s ease;
 }
 
 .btn{
@@ -143,26 +125,22 @@ color:white;
 border-radius:14px;
 text-decoration:none;
 font-weight:800;
-transition:.3s;
-box-shadow:0 0 30px rgba(255,23,79,.4);
-}
-
-.btn:hover{
-transform:scale(1.08);
-box-shadow:0 0 50px rgba(255,23,79,.7);
 }
 
 /* ===== SECTIONS ===== */
 .section{
 padding:90px 0;
 opacity:0;
-transform:translateY(40px);
+transform:translateY(80px) scale(0.95);
+filter:blur(10px);
 transition:1s;
+cursor:pointer;
 }
 
 .section.show{
 opacity:1;
-transform:translateY(0);
+transform:translateY(0) scale(1);
+filter:blur(0);
 }
 
 .title{
@@ -186,13 +164,6 @@ border:1px solid rgba(255,255,255,0.08);
 padding:30px;
 border-radius:18px;
 transition:.4s;
-transform:translateY(20px);
-opacity:0;
-}
-
-.card.show{
-opacity:1;
-transform:translateY(0);
 }
 
 .card:hover{
@@ -211,7 +182,19 @@ color:#aaa;
 line-height:1.6;
 }
 
-/* ===== FOOTER ===== */
+/* DOWNLOAD BUTTON */
+.download{
+display:inline-block;
+margin-top:15px;
+padding:10px 18px;
+background:#ff174f;
+color:white;
+border-radius:10px;
+text-decoration:none;
+font-weight:700;
+}
+
+/* FOOTER */
 footer{
 text-align:center;
 padding:40px;
@@ -219,40 +202,13 @@ color:#777;
 border-top:1px solid #222;
 margin-top:60px;
 }
-
-/* ===== Animations ===== */
-@keyframes fadeUp{
-from{opacity:0;transform:translateY(40px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-/* ===== WhatsApp ===== */
-.float{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#25D366;
-padding:14px 16px;
-border-radius:50px;
-font-weight:800;
-text-decoration:none;
-color:white;
-box-shadow:0 0 25px rgba(0,255,120,.3);
-transition:.3s;
-}
-
-.float:hover{
-transform:scale(1.1);
-}
 </style>
 </head>
 
 <body>
 
-<div class="bg">
-<div class="glow"></div>
-<div class="glow"></div>
-</div>
+<div class="bg"></div>
+<canvas id="particles"></canvas>
 
 <div class="container">
 
@@ -269,18 +225,32 @@ transform:scale(1.1);
 <section class="hero">
 <div>
 <h1>BUILD <span>ELITE BODY</span></h1>
-<p>Train like a beast. Eat like a pro. Become unstoppable.</p>
+<p>Train like a beast. Become unstoppable.</p>
 <a href="#programs" class="btn">ENTER SYSTEM</a>
 </div>
 </section>
 
-<section class="section" id="programs">
+<section class="section" id="programs" onclick="openSection('programs')">
 <h2 class="title">Training Programs</h2>
 
 <div class="cards">
-<div class="card"><h3>Beginner</h3><p>Start strong with smart fundamentals.</p></div>
-<div class="card"><h3>Hypertrophy</h3><p>Maximum muscle growth system.</p></div>
-<div class="card"><h3>Fat Burn</h3><p>Cut fat while keeping strength.</p></div>
+<div class="card">
+<h3>Beginner</h3>
+<p>Start strong fundamentals.</p>
+<a class="download" href="files/beginner.pdf" download>Download</a>
+</div>
+
+<div class="card">
+<h3>Hypertrophy</h3>
+<p>Muscle growth system.</p>
+<a class="download" href="files/bulking.pdf" download>Download</a>
+</div>
+
+<div class="card">
+<h3>Fat Burn</h3>
+<p>Cut fat & keep muscle.</p>
+<a class="download" href="files/fatloss.pdf" download>Download</a>
+</div>
 </div>
 </section>
 
@@ -288,9 +258,17 @@ transform:scale(1.1);
 <h2 class="title">Nutrition Plans</h2>
 
 <div class="cards">
-<div class="card"><h3>Cutting</h3><p>Lean body definition plan.</p></div>
-<div class="card"><h3>Bulking</h3><p>Clean mass gain strategy.</p></div>
-<div class="card"><h3>Tracking</h3><p>Macros & calories control system.</p></div>
+<div class="card">
+<h3>Cutting</h3>
+<p>Lean body plan.</p>
+<a class="download" href="files/cutting.pdf" download>Download</a>
+</div>
+
+<div class="card">
+<h3>Bulking</h3>
+<p>Clean mass gain.</p>
+<a class="download" href="files/bulking.pdf" download>Download</a>
+</div>
 </div>
 </section>
 
@@ -298,13 +276,11 @@ transform:scale(1.1);
 © 2026 Ayham Elite Fitness
 </footer>
 
-<a class="float" href="https://wa.me/962799954369" target="_blank">WhatsApp</a>
-
 </div>
 
 <script>
+// reveal animation
 const sections=document.querySelectorAll('.section');
-const cards=document.querySelectorAll('.card');
 
 const observer=new IntersectionObserver(entries=>{
 entries.forEach(entry=>{
@@ -315,7 +291,52 @@ entry.target.classList.add('show');
 },{threshold:0.15});
 
 sections.forEach(s=>observer.observe(s));
-cards.forEach(c=>observer.observe(c));
+
+// click scroll
+function openSection(id){
+document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+// ===== PARTICLES =====
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+for(let i=0;i<80;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+dx:(Math.random()-0.5),
+dy:(Math.random()-0.5)
+});
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#ff174f";
+
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+
+p.x+=p.dx;
+p.y+=p.dy;
+
+if(p.x<0||p.x>canvas.width)p.dx*=-1;
+if(p.y<0||p.y>canvas.height)p.dy*=-1;
+});
+
+requestAnimationFrame(animate);
+}
+
+animate();
 </script>
 
 </body>
