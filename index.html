@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ayham Fitness Elite</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 
 <style>
 html {
@@ -16,13 +16,24 @@ html {
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Inter',sans-serif;
+font-family:'Inter', sans-serif;
+}
+
+/* دعم الخط العربي ليكون متناسقاً */
+body.rtl * {
+    font-family: 'Cairo', sans-serif;
 }
 
 body{
 background:#050505;
 color:white;
 overflow-x:hidden;
+}
+
+/* لتغيير الاتجاه بالكامل عند تحويل اللغة */
+body.rtl {
+    direction: rtl;
+    text-align: right;
 }
 
 /* ===== BACKGROUND ===== */
@@ -69,7 +80,6 @@ color:#ff174f;
 letter-spacing:2px;
 }
 
-/* التنسيق الجديد للأزرار أعلى اليمين بناءً على image.png */
 nav{
 display:flex;
 gap:12px;
@@ -85,10 +95,11 @@ align-items:center;
     padding: 10px 16px;
     border-radius: 50px;
     text-decoration: none;
-    color: #e01243;
+    color: #ff174f;
     font-weight: 700;
     font-size: 14px;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 .lang-btn svg {
@@ -113,7 +124,6 @@ align-items:center;
     font-weight: 700;
     font-size: 16px;
     transition: 0.3s;
-    text-shadow: none;
     box-shadow: 0 4px 15px rgba(255,23,79,0.2);
 }
 
@@ -208,7 +218,16 @@ border-left: 4px solid #ff174f;
 padding-left: 15px;
 }
 
-/* ===== CARDS (الترتيب العمودي الأصلي تبعك) ===== */
+/* تعديل حدود العنوان عند قلب اللغة للعربية */
+body.rtl .title {
+    text-align: right;
+    border-left: none;
+    border-right: 4px solid #ff174f;
+    padding-left: 0;
+    padding-right: 15px;
+}
+
+/* ===== CARDS ===== */
 .cards{
 display:flex;
 flex-direction: column;
@@ -245,6 +264,9 @@ background: rgba(20, 20, 20, 0.8);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+body.rtl .card-badge {
+    align-self: flex-start;
+}
 
 .card-info h3{
 font-size: 28px;
@@ -259,7 +281,7 @@ font-size: 15px;
 font-weight: 400;
 }
 
-/* Grid specs from image_2.png */
+/* Grid specs */
 .card-specs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -277,6 +299,12 @@ font-weight: 400;
 
 .spec-item:not(:last-child) {
     border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* لقلب حدود الخصائص في اللغة العربية */
+body.rtl .spec-item:not(:last-child) {
+    border-right: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .spec-label {
@@ -339,8 +367,12 @@ font-size: 14px;
         text-align: left;
         padding: 15px 5px;
     }
+    body.rtl .card-specs {
+        text-align: right;
+    }
     .spec-item:not(:last-child) {
         border-right: none;
+        border-left: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         padding-bottom: 10px;
     }
@@ -358,14 +390,14 @@ font-size: 14px;
 <header>
 <div class="logo">AYHAM ELITE</div>
 
-<!-- الأزرار الجديدة المضافة هنا بالظبط -->
 <nav>
-    <a href="#" class="lang-btn">
+    <!-- زر اللغة التفاعلي -->
+    <div class="lang-btn" id="langToggle">
         <svg width="16" height="16" viewBox="0 0 24 24">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
         </svg>
-        <span>AR</span>
-    </a>
+        <span id="langText">AR</span>
+    </div>
 
     <a class="insta-btn" href="https://instagram.com/2yhamm" target="_blank">Instagram</a>
 
@@ -381,91 +413,91 @@ font-size: 14px;
 
 <section class="hero">
 <div>
-<h1>BUILD <span>ELITE BODY</span></h1>
-<p>Train like a beast. Become unstoppable.</p>
-<a href="#programs" class="btn">ENTER SYSTEM</a>
+<h1 id="heroTitle">BUILD <span>ELITE BODY</span></h1>
+<p id="heroDesc">Train like a beast. Become unstoppable.</p>
+<a href="#programs" class="btn" id="heroBtn">ENTER SYSTEM</a>
 </div>
 </section>
 
 <!-- TRAINING PROGRAMS SECTION -->
 <section class="section" id="programs">
-<h2 class="title">Training Programs</h2>
+<h2 class="title" id="secTitle1">Training Programs</h2>
 
 <div class="cards">
     <!-- Card 1 -->
     <div class="card">
-        <div class="card-badge">Beginner</div>
+        <div class="card-badge" id="b1">Beginner</div>
         <div class="card-info">
-            <h3>Beginner</h3>
-            <p>Start strong fundamentals.</p>
+            <h3 id="t1">Beginner</h3>
+            <p id="d1">Start strong fundamentals.</p>
         </div>
         <div class="card-specs">
             <div class="spec-item">
-                <span class="spec-label">Days</span>
-                <span class="spec-value">3–4</span>
+                <span class="spec-label" id="lbl1_1">Days</span>
+                <span class="spec-value" id="val1_1">3–4</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Level</span>
-                <span class="spec-value">Beginner</span>
+                <span class="spec-label" id="lbl1_2">Level</span>
+                <span class="spec-value" id="val1_2">Beginner</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Type</span>
-                <span class="spec-value">Full Body</span>
+                <span class="spec-label" id="lbl1_3">Type</span>
+                <span class="spec-value" id="val1_3">Full Body</span>
             </div>
         </div>
-        <a class="download" href="files/beginner.pdf" download>
+        <a class="download" href="files/beginner.pdf" download id="btn1">
             <span>↓</span> Download
         </a>
     </div>
 
     <!-- Card 2 -->
     <div class="card">
-        <div class="card-badge">Hypertrophy</div>
+        <div class="card-badge" id="b2">Hypertrophy</div>
         <div class="card-info">
-            <h3>Hypertrophy</h3>
-            <p>Muscle growth system.</p>
+            <h3 id="t2">Hypertrophy</h3>
+            <p id="d2">Muscle growth system.</p>
         </div>
         <div class="card-specs">
             <div class="spec-item">
-                <span class="spec-label">Days</span>
-                <span class="spec-value">4–5</span>
+                <span class="spec-label" id="lbl2_1">Days</span>
+                <span class="spec-value" id="val2_1">4–5</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Level</span>
-                <span class="spec-value">Intermediate</span>
+                <span class="spec-label" id="lbl2_2">Level</span>
+                <span class="spec-value" id="val2_2">Intermediate</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Type</span>
-                <span class="spec-value">Push Pull Legs</span>
+                <span class="spec-label" id="lbl2_3">Type</span>
+                <span class="spec-value" id="val2_3">Push Pull Legs</span>
             </div>
         </div>
-        <a class="download" href="files/bulking.pdf" download>
+        <a class="download" href="files/bulking.pdf" download id="btn2">
             <span>↓</span> Download
         </a>
     </div>
 
     <!-- Card 3 -->
     <div class="card">
-        <div class="card-badge">Fat Burn</div>
+        <div class="card-badge" id="b3">Fat Burn</div>
         <div class="card-info">
-            <h3>Fat Burn</h3>
-            <p>Cut fat & keep muscle.</p>
+            <h3 id="t3">Fat Burn</h3>
+            <p id="d3">Cut fat & keep muscle.</p>
         </div>
         <div class="card-specs">
             <div class="spec-item">
-                <span class="spec-label">Days</span>
-                <span class="spec-value">4–6</span>
+                <span class="spec-label" id="lbl3_1">Days</span>
+                <span class="spec-value" id="val3_1">4–6</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Level</span>
-                <span class="spec-value">All Levels</span>
+                <span class="spec-label" id="lbl3_2">Level</span>
+                <span class="spec-value" id="val3_2">All Levels</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Type</span>
-                <span class="spec-value">Full Body</span>
+                <span class="spec-label" id="lbl3_3">Type</span>
+                <span class="spec-value" id="val3_3">Full Body</span>
             </div>
         </div>
-        <a class="download" href="files/fatloss.pdf" download>
+        <a class="download" href="files/fatloss.pdf" download id="btn3">
             <span>↓</span> Download
         </a>
     </div>
@@ -474,73 +506,146 @@ font-size: 14px;
 
 <!-- NUTRITION SECTION -->
 <section class="section" id="nutrition">
-<h2 class="title">Nutrition Plans</h2>
+<h2 class="title" id="secTitle2">Nutrition Plans</h2>
 
 <div class="cards">
     <!-- Nutrition Card 1 -->
     <div class="card">
-        <div class="card-badge">Fat Loss</div>
+        <div class="card-badge" id="b4">Fat Loss</div>
         <div class="card-info">
-            <h3>Cutting Plan</h3>
-            <p>Lean body, sharp definitions.</p>
+            <h3 id="t4">Cutting Plan</h3>
+            <p id="d4">Lean body, sharp definitions.</p>
         </div>
         <div class="card-specs">
             <div class="spec-item">
-                <span class="spec-label">Goal</span>
-                <span class="spec-value">Deficit</span>
+                <span class="spec-label" id="lbl4_1">Goal</span>
+                <span class="spec-value" id="val4_1">Deficit</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Focus</span>
-                <span class="spec-value">Fat Loss</span>
+                <span class="spec-label" id="lbl4_2">Focus</span>
+                <span class="spec-value" id="val4_2">Fat Loss</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Type</span>
-                <span class="spec-value">High Protein</span>
+                <span class="spec-label" id="lbl4_3">Type</span>
+                <span class="spec-value" id="val4_3">High Protein</span>
             </div>
         </div>
-        <a class="download" href="files/cutting.pdf" download>
+        <a class="download" href="files/cutting.pdf" download id="btn4">
             <span>↓</span> Download Plan
         </a>
     </div>
 
     <!-- Nutrition Card 2 -->
     <div class="card">
-        <div class="card-badge">Mass Gain</div>
+        <div class="card-badge" id="b5">Mass Gain</div>
         <div class="card-info">
-            <h3>Bulking Plan</h3>
-            <p>Clean mass gain with minimal fat.</p>
+            <h3 id="t5">Bulking Plan</h3>
+            <p id="d5">Clean mass gain with minimal fat.</p>
         </div>
         <div class="card-specs">
             <div class="spec-item">
-                <span class="spec-label">Goal</span>
-                <span class="spec-value">Surplus</span>
+                <span class="spec-label" id="lbl5_1">Goal</span>
+                <span class="spec-value" id="val5_1">Surplus</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Focus</span>
-                <span class="spec-value">Muscle Mass</span>
+                <span class="spec-label" id="lbl5_2">Focus</span>
+                <span class="spec-value" id="val5_2">Muscle Mass</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">Type</span>
-                <span class="spec-value">Clean Bulking</span>
+                <span class="spec-label" id="lbl5_3">Type</span>
+                <span class="spec-value" id="val5_3">Clean Bulking</span>
             </div>
         </div>
-        <a class="download" href="files/bulking.pdf" download>
+        <a class="download" href="files/bulking.pdf" download id="btn5">
             <span>↓</span> Download Plan
         </a>
     </div>
 </div>
 </section>
 
-<footer>
+<footer id="footerText">
 © 2026 Ayham Elite Fitness
 </footer>
 
 </div>
 
 <script>
+// كود جافاسكريبت للترجمة الفورية وتبديل اللغات
+const langToggle = document.getElementById('langToggle');
+const langText = document.getElementById('langText');
+
+const translations = {
+    en: {
+        lang: "AR",
+        heroTitle: 'BUILD <span>ELITE BODY</span>',
+        heroDesc: "Train like a beast. Become unstoppable.",
+        heroBtn: "ENTER SYSTEM",
+        secTitle1: "Training Programs",
+        secTitle2: "Nutrition Plans",
+        footer: "© 2026 Ayham Elite Fitness",
+        // كروت التمارين
+        b1: "Beginner", t1: "Beginner", d1: "Start strong fundamentals.", lbl1_1: "Days", val1_1: "3–4", lbl1_2: "Level", val1_2: "Beginner", lbl1_3: "Type", val1_3: "Full Body", btn1: "↓ Download",
+        b2: "Hypertrophy", t2: "Hypertrophy", d2: "Muscle growth system.", lbl2_1: "Days", val2_1: "4–5", lbl2_2: "Level", val2_2: "Intermediate", lbl2_3: "Type", val2_3: "Push Pull Legs", btn2: "↓ Download",
+        b3: "Fat Burn", t3: "Fat Burn", d3: "Cut fat & keep muscle.", lbl3_1: "Days", val3_1: "4–6", lbl3_2: "Level", val3_2: "All Levels", lbl3_3: "Type", val3_3: "Full Body", btn3: "↓ Download",
+        // كروت التغذية
+        b4: "Fat Loss", t4: "Cutting Plan", d4: "Lean body, sharp definitions.", lbl4_1: "Goal", val4_1: "Deficit", lbl4_2: "Focus", val4_2: "Fat Loss", lbl4_3: "Type", val4_3: "High Protein", btn4: "↓ Download Plan",
+        b5: "Mass Gain", t5: "Bulking Plan", d5: "Clean mass gain with minimal fat.", lbl5_1: "Goal", val5_1: "Surplus", lbl5_2: "Focus", val5_2: "Muscle Mass", lbl5_3: "Type", val5_3: "Clean Bulking", btn5: "↓ Download Plan"
+    },
+    ar: {
+        lang: "EN",
+        heroTitle: 'ابنِ <span>جسداً مثالياً</span>',
+        heroDesc: "تمرّن كالأبطال. واصبح قوة لا يمكن إيقافها.",
+        heroBtn: "دخول النظام",
+        secTitle1: "البرامج التدريبية",
+        secTitle2: "الأنظمة الغذائية",
+        footer: "© 2026 أيهم إليت فيتنس. جميع الحقوق محفوظة.",
+        // كروت التمارين
+        b1: "مبتدئ", t1: "برنامج المبتدئين", d1: "ابدأ بقوة مع الأساسيات الصحيحة.", lbl1_1: "الأيام", val1_1: "3–4", lbl1_2: "المستوى", val1_2: "مبتدئ", lbl1_3: "النوع", val1_3: "جسم كامل", btn1: "↓ تحميل البرنامج",
+        b2: "الضخامة", t2: "برنامج التضخيم", d2: "نظام متكامل للبناء العضلي.", lbl2_1: "الأيام", val2_1: "4–5", lbl2_2: "المستوى", val2_2: "متوسط", lbl2_3: "النوع", val2_3: "دفع سحب أرجل", btn2: "↓ تحميل البرنامج",
+        b3: "حرق الدهون", t3: "برنامج التنشيف", d3: "احرق الدهون وحافظ على عضلاتك.", lbl3_1: "الأيام", val3_1: "4–6", lbl3_2: "المستوى", val3_2: "كل المستويات", lbl3_3: "النوع", val3_3: "جسم كامل", btn3: "↓ تحميل البرنامج",
+        // كروت التغذية
+        b4: "خسارة وزن", t4: "خطة التنشيف", d4: "جسم منسق، وتفاصيل عضلية واضحة.", lbl4_1: "الهدف", val4_1: "عجز سعرات", lbl4_2: "التركيز", val4_2: "حرق دهون", lbl4_3: "النوع", val4_3: "بروتين عالٍ", btn4: "↓ تحميل الخطة",
+        b5: "زيادة وزن", t5: "خطة التضخيم", d5: "زيادة كتلة عضلية صافية بأقل دهون.", lbl5_1: "الهدف", val5_1: "فائض سعرات", lbl5_2: "التركيز", val5_2: "كتلة عضلية", lbl5_3: "النوع", val5_3: "تضخيم نظيف", btn5: "↓ تحميل الخطة"
+    }
+};
+
+let currentLang = 'en';
+
+langToggle.addEventListener('click', () => {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    
+    if (currentLang === 'ar') {
+        document.body.classList.add('rtl');
+    } else {
+        document.body.classList.remove('rtl');
+    }
+    
+    langText.textContent = translations[currentLang].lang;
+    document.getElementById('heroTitle').innerHTML = translations[currentLang].heroTitle;
+    document.getElementById('heroDesc').textContent = translations[currentLang].heroDesc;
+    document.getElementById('heroBtn').textContent = translations[currentLang].heroBtn;
+    document.getElementById('secTitle1').textContent = translations[currentLang].secTitle1;
+    document.getElementById('secTitle2').textContent = translations[currentLang].secTitle2;
+    document.getElementById('footerText').textContent = translations[currentLang].footer;
+    
+    // تحديث الكروت ديناميكياً
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById(`b${i}`).textContent = translations[currentLang][`b${i}`];
+        document.getElementById(`t${i}`).textContent = translations[currentLang][`t${i}`];
+        document.getElementById(`d${i}`).textContent = translations[currentLang][`d${i}`];
+        document.getElementById(`btn${i}`).innerHTML = `<span>↓</span> ` + translations[currentLang][`btn${i}`].replace('↓ ', '');
+        
+        for (let j = 1; j <= 3; j++) {
+            if(document.getElementById(`lbl${i}_${j}`)) {
+                document.getElementById(`lbl${i}_${j}`).textContent = translations[currentLang][`lbl${i}_${j}`];
+                document.getElementById(`val${i}_${j}`).textContent = translations[currentLang][`val${i}_${j}`];
+            }
+        }
+    }
+});
+
 // reveal animation
 const sections=document.querySelectorAll('.section');
-
 const observer=new IntersectionObserver(entries=>{
 entries.forEach(entry=>{
 if(entry.isIntersecting){
@@ -548,11 +653,9 @@ entry.target.classList.add('show');
 }
 });
 },{threshold:0.1});
-
 sections.forEach(s=>observer.observe(s));
 
-
-// ===== PARTICLES WITH RESIZE FIX =====
+// ===== PARTICLES =====
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 
@@ -564,7 +667,6 @@ resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 let particles=[];
-
 for(let i=0;i<60;i++){
 particles.push({
 x:Math.random()*window.innerWidth,
@@ -578,22 +680,17 @@ dy:(Math.random()-0.5)*0.6
 function animate(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
 ctx.fillStyle="rgba(255, 23, 79, 0.8)";
-
 particles.forEach(p=>{
 ctx.beginPath();
 ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
 ctx.fill();
-
 p.x+=p.dx;
 p.y+=p.dy;
-
 if(p.x<0||p.x>canvas.width)p.dx*=-1;
 if(p.y<0||p.y>canvas.height)p.dy*=-1;
 });
-
 requestAnimationFrame(animate);
 }
-
 animate();
 </script>
 
