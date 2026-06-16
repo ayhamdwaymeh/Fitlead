@@ -1267,75 +1267,227 @@ font-size: 14px;
     </div>
 </div>
     
-<!-- ===== حاسبة السعرات والماكروز الاحترافية الذكية والمقسمة ===== -->
-<section class="section" id="calculator">
-<h2 class="title" id="calcTitle">Calorie & Macros Calculator</h2>
+<!-- ======================================================= -->
+<!-- قسم حاسبة السعرات الاحترافية المتطورة -->
+<!-- ======================================================= -->
+<style>
+    .fitlead-calc-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px auto 80px auto;
+        padding: 35px;
+        background: rgba(14, 14, 16, 0.75) !important; /* خلفية داكنة شفافة متناسقة مع الموقع */
+        border: 1px solid #1c1c1e;
+        border-radius: 24px;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        direction: ltr; /* واجهة احترافية بالإنجليزية */
+        text-align: left;
+    }
 
-<div class="calc-premium-wrapper">
-    <div class="calc-grid">
-        <div class="input-card">
-            <label id="lblWeight">Weight (kg)</label>
-            <input type="number" id="weight" placeholder="00" class="num-font">
-        </div>
-        <div class="input-card">
-            <label id="lblHeight">Height (cm)</label>
-            <input type="number" id="height" placeholder="00" class="num-font">
-        </div>
-        <div class="input-card">
-            <label id="lblAge">Age</label>
-            <input type="number" id="age" placeholder="00" class="num-font">
-        </div>
-        <div class="input-card">
-            <label id="lblGoal">Fitness Goal</label>
-            <select id="goal">
-                <option value="cut" id="optCut">Fat Loss / Cutting</option>
-                <option value="bulk" id="optBulk">Muscle Gain / Bulking</option>
-            </select>
-        </div>
-        <div class="input-card" style="grid-column: span 2;">
-            <label id="lblActivity">Activity Level</label>
-            <select id="activity">
-                <option value="1.2" id="opt1">Sedentary (No exercise)</option>
-                <option value="1.375" id="opt2">Light (1-3 days/week)</option>
-                <option value="1.55" id="opt3">Moderate (3-5 days/week)</option>
-                <option value="1.725" id="opt4">Heavy (6-7 days/week)</option>
-            </select>
+    .fitlead-calc-group {
+        margin-bottom: 25px;
+    }
+
+    .fitlead-calc-label {
+        display: block;
+        color: #888888;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+    }
+
+    /* أزرار اختيار الجنس (Male / Female) المودرن */
+    .fitlead-gender-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .fitlead-gender-btn {
+        background: transparent;
+        border: 1px solid #1c1c1e;
+        color: #ffffff;
+        padding: 14px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .fitlead-gender-btn.active {
+        border-color: #e03131;
+        background: rgba(224, 49, 49, 0.1);
+        color: #ff6b6b;
+    }
+
+    /* حقول الإدخال */
+    .fitlead-calc-input, .fitlead-calc-select {
+        width: 100%;
+        padding: 14px 18px;
+        background: #050505;
+        border: 1px solid #1c1c1e;
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 1rem;
+        box-sizing: border-box;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    .fitlead-calc-input:focus, .fitlead-calc-select:focus {
+        border-color: #e03131;
+    }
+
+    /* زر الحساب الأحمر */
+    .fitlead-calc-btn {
+        width: 100%;
+        background: #e03131;
+        color: #ffffff;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .fitlead-calc-btn:hover {
+        background: #c92a2a;
+    }
+
+    /* صندوق النتيجة الاحترافي */
+    .fitlead-calc-result {
+        margin-top: 30px;
+        padding: 25px;
+        background: rgba(224, 49, 49, 0.05);
+        border: 1px dashed rgba(224, 49, 49, 0.3);
+        border-radius: 16px;
+        text-align: center;
+        display: none; /* يظهر فقط عند الحساب */
+    }
+
+    .fitlead-result-number {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: #ff6b6b;
+        margin: 5px 0;
+    }
+
+    .fitlead-result-text {
+        color: #888888;
+        font-size: 0.95rem;
+    }
+</style>
+
+<div class="fitlead-calc-container">
+    <!-- اختيار الجنس -->
+    <div class="fitlead-calc-group">
+        <label class="fitlead-calc-label">SELECT GENDER</label>
+        <div class="fitlead-gender-selector">
+            <button type="button" class="fitlead-gender-btn active" id="btn-male" onclick="setGender('male')">MALE</button>
+            <button type="button" class="fitlead-gender-btn" id="btn-female" onclick="setGender('female')">FEMALE</button>
         </div>
     </div>
-    
-    <div style="text-align: center;">
-        <button class="calc-btn-glow" id="btnCalculate" onclick="calculateMacros()">Calculate Targets</button>
+
+    <!-- الطول والوزن والعمر في سطرين متناسقين -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="fitlead-calc-group">
+            <label class="fitlead-calc-label">WEIGHT (KG)</label>
+            <input type="number" id="calc-weight" class="fitlead-calc-input" placeholder="e.g. 75">
+        </div>
+        <div class="fitlead-calc-group">
+            <label class="fitlead-calc-label">HEIGHT (CM)</label>
+            <input type="number" id="calc-height" class="fitlead-calc-input" placeholder="e.g. 178">
+        </div>
     </div>
 
-    <!-- لوحة توزيع الماكروز بعد الحساب -->
-    <div class="premium-result-box" id="calcResult">
-        <div class="macros-display-grid">
-            <!-- كرت السعرات الرئيسي -->
-            <div class="macro-box calories-main">
-                <div class="macro-num num-font" id="caloriesValue">0</div>
-                <div class="macro-label" id="lblResCalories">Calories</div>
-            </div>
-            <!-- كرت البروتين -->
-            <div class="macro-box">
-                <div class="macro-num num-font" id="proteinValue">0g</div>
-                <div class="macro-label" id="lblResProtein">Protein</div>
-            </div>
-            <!-- كرت الكارب -->
-            <div class="macro-box">
-                <div class="macro-num num-font" id="carbsValue">0g</div>
-                <div class="macro-label" id="lblResCarbs">Carbs</div>
-            </div>
-            <!-- كرت الدهون -->
-            <div class="macro-box">
-                <div class="macro-num num-font" id="fatsValue">0g</div>
-                <div class="macro-label" id="lblResFats">Fats</div>
-            </div>
-        </div>
-        <p class="premium-rec-text" id="recommendationText"></p>
+    <div class="fitlead-calc-group">
+        <label class="fitlead-calc-label">AGE</label>
+        <input type="number" id="calc-age" class="fitlead-calc-input" placeholder="e.g. 24">
+    </div>
+
+    <!-- مستوى النشاط البدني -->
+    <div class="fitlead-calc-group">
+        <label class="fitlead-calc-label">ACTIVITY LEVEL</label>
+        <select id="calc-activity" class="fitlead-calc-select">
+            <option value="1.2">Sedentary (Office job, no exercise)</option>
+            <option value="1.375">Lightly Active (Light exercise 1-3 days/week)</option>
+            <option value="1.55" selected>Moderately Active (Heavy exercise 3-5 days/week)</option>
+            <option value="1.725">Very Active (Heavy intense exercise 6-7 days/week)</option>
+            <option value="1.9">Athlete / Extra Active (Twice a day training)</option>
+        </select>
+    </div>
+
+    <button type="button" class="fitlead-calc-btn" onclick="calculateMaintenance()">CALCULATE CALORIES</button>
+
+    <!-- مكان ظهور النتيجة الفخمة -->
+    <div class="fitlead-calc-result" id="calc-result-box">
+        <span class="fitlead-calc-label" style="margin-bottom: 0;">YOUR MAINTENANCE CALORIES</span>
+        <div class="fitlead-result-number" id="calories-output">0</div>
+        <p class="fitlead-result-text">Kcal / Day required to maintain your current weight.</p>
     </div>
 </div>
-</section>
 
+<script>
+    // متغير لتخزين الجنس المختار (الافتراضي ذكر)
+    let selectedGender = 'male';
+
+    function setGender(gender) {
+        selectedGender = gender;
+        document.getElementById('btn-male').classList.remove('active');
+        document.getElementById('btn-female').classList.remove('active');
+        
+        if(gender === 'male') {
+            document.getElementById('btn-male').classList.add('active');
+        } else {
+            document.getElementById('btn-female').classList.add('active');
+        }
+    }
+
+    function calculateMaintenance() {
+        const weight = parseFloat(document.getElementById('calc-weight').value);
+        const height = parseFloat(document.getElementById('calc-height').value);
+        const age = parseFloat(document.getElementById('calc-age').value);
+        const activity = parseFloat(document.getElementById('calc-activity').value);
+
+        // التحقق من إدخال البيانات كاملة
+        if (!weight || !height || !age) {
+            alert("Please fill in all fields correctly.");
+            return;
+        }
+
+        let bmr = 0;
+        
+        // تطبيق معادلة Mifflin-St Jeor بدقة بناءً على الجنس
+        if (selectedGender === 'male') {
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+        } else {
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+        }
+
+        // حساب سعرات الثبات النهائية بناءً على مجهوده البدني
+        const totalCalories = Math.round(bmr * activity);
+
+        // إظهار النتيجة وتحديث الرقم بالحركة والانسيابية
+        const resultBox = document.getElementById('calc-result-box');
+        const output = document.getElementById('calories-output');
+        
+        resultBox.style.display = 'block';
+        output.innerText = totalCalories.toLocaleString();
+        
+        // التمرير السلس للنتيجة لكي يراها المستخدم بوضوح
+        resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+</script>
+<!-- ======================================================= -->
+<!-- نهاية قسم حاسبة السعرات المتطورة -->
+<!-- ======================================================= -->
+    
 <!-- ===== قسم مستكشف الوظائف الحركية التفاعلي الجديد ===== -->
 <section class="section" id="explorer">
 <h2 class="title" id="explorerTitle">Movement Explorer</h2>
