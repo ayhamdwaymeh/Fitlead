@@ -870,32 +870,34 @@ font-size: 14px;
 </div>
 </section>
 
-<!-- ======================================================= -->
-<!-- قسم البرامج التدريبية - نسخة شفافة وموسطة بالكامل -->
-<!-- ======================================================= -->
 <style>
-    .fitlead-programs-container {
+    /* الحاوية الرئيسية المعزولة لمنع الحركة العشوائية والتداخل */
+    .fitlead-clean-wrapper {
         width: 100%;
         max-width: 1200px;
-        margin: 60px auto;
-        padding: 20px;
+        margin: 140px auto 60px auto; /* مسافة علوية ممتازة تضمن ثباته تحت الهيدر الأصلي */
+        padding: 0 20px;
         box-sizing: border-box;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: transparent; /* إزالة الخلفية السوداء تماماً ليظهر موقعك الأصلي */
+        background: transparent !important; /* شفاف تماماً لتظهر نقاط الموقع خلفه */
+        position: relative;
+        display: block;
+        clear: both; /* عزل كامل عن أي عناصر علوية وسفلية */
     }
 
-    /* تنسيق الترويسة العلوية موسطة ونظيفة تماماً مثل الصورة */
-    .fitlead-main-header {
+    /* الترويسة الموسطة بالكامل طبق الأصل من صورتك */
+    .fitlead-static-header {
         display: flex;
         flex-direction: column;
-        align-items: center;    /* توسيط كل العناصر */
-        text-align: center;
+        align-items: center; /* توسيط أفقي */
+        text-align: center;  /* توسيط النصوص */
         width: 100%;
         margin-bottom: 50px;
-        background: transparent;
+        background: transparent !important;
     }
 
-    .fitlead-badge-top {
+    /* شارة الـ PROGRAMMING الموسطة النظيفة */
+    .fitlead-badge-top-fixed {
         border: 1px solid #c92a2a;
         color: #ff6b6b;
         font-size: 0.75rem;
@@ -908,8 +910,9 @@ font-size: 14px;
         background: rgba(199, 42, 42, 0.05);
     }
 
-    .fitlead-main-title {
-        font-size: 3.8rem; /* خط عريض وكبير للعنوان */
+    /* العنوان الكبير الموسط الثابت */
+    .fitlead-title-fixed {
+        font-size: 3.8rem;
         font-weight: 800;
         margin: 0 0 20px 0;
         color: #ffffff;
@@ -917,24 +920,25 @@ font-size: 14px;
         line-height: 1.2;
     }
 
-    .fitlead-main-subtitle {
+    /* النص الفرعي المفرود عرضياً بطريقة مريحة للعين */
+    .fitlead-subtitle-fixed {
         color: #888888;
         font-size: 1.2rem;
         line-height: 1.6;
-        max-width: 750px; /* فرد النص عرضياً بشكل مريح تماماً كالصورة */
+        max-width: 750px;
         margin: 0 auto;
     }
 
-    /* الصندوق الكبير الاحترافي (How it works) */
-    .fitlead-how-it-works-card {
-        background-color: #0b0b0c;
+    /* صندوق آلية العمل الشفاف والمحمي */
+    .fitlead-works-box {
+        background: transparent !important; /* تم حذف اللون الأسود نهائياً هنا ليكون شفافاً وثابتاً */
         border: 1px solid #1c1c1e;
         border-radius: 24px;
         padding: 45px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         text-align: left;
         direction: ltr;
         margin-top: 20px;
+        box-shadow: none !important;
     }
 
     .fitlead-badge-red {
@@ -973,7 +977,7 @@ font-size: 14px;
     }
 
     .fitlead-step-item {
-        background-color: #0e0e10;
+        background-color: rgba(14, 14, 16, 0.75); /* تظليل خفيف جداً للكروت لتظل خلفية الموقع واضحة */
         border: 1px solid #1c1c1e;
         border-radius: 16px;
         padding: 25px;
@@ -1007,60 +1011,47 @@ font-size: 14px;
     }
 
     @media (max-width: 768px) {
-        .fitlead-main-title {
-            font-size: 2.6rem;
-        }
-        .fitlead-main-subtitle {
-            font-size: 1.05rem;
-        }
-        .fitlead-how-it-works-card {
-            padding: 25px;
-        }
+        .fitlead-clean-wrapper { margin-top: 160px; }
+        .fitlead-title-fixed { font-size: 2.6rem; }
+        .fitlead-subtitle-fixed { font-size: 1.05rem; }
+        .fitlead-works-box { padding: 25px; }
     }
 </style>
 
-<div class="fitlead-programs-container">
-    <!-- الترويسة الموسطة والشفافة بالكامل -->
-    <header class="fitlead-main-header">
-        <span class="fitlead-badge-top">PROGRAMMING</span>
-        <h1 class="fitlead-main-title">Training Programs</h1>
-        <p class="fitlead-main-subtitle">
+<div class="fitlead-clean-wrapper">
+    <div class="fitlead-static-header">
+        <span class="fitlead-badge-top-fixed">PROGRAMMING</span>
+        <h1 class="fitlead-title-fixed">Training Programs</h1>
+        <p class="fitlead-subtitle-fixed">
             Four evidence-based splits. Each engineered around frequency, recovery, and stimulus distribution.
         </p>
-    </header>
+    </div>
 
-    <!-- المربع الكبير الاحترافي الذي يظهر بالأسفل -->
-    <section class="fitlead-how-it-works-card">
+    <section class="fitlead-works-box">
         <span class="fitlead-badge-red">HOW IT WORKS</span>
-        
         <h2 class="fitlead-section-heading">
             The spreadsheets give you a structure — you fill it with exercises that fit you.
         </h2>
-        
         <p class="fitlead-section-description">
             Every Excel file lists Movement Functions instead of exercise names. This forces you to think in mechanics — not in 'bench press' but in 'Horizontal Adduction'. You then choose the actual exercise from the Explorer below, based on your equipment and your weak points.
         </p>
 
         <div class="fitlead-steps-grid">
-            <!-- كرت 1 -->
             <div class="fitlead-step-item">
                 <span class="fitlead-step-number">01</span>
                 <h3>Pick a Program</h3>
                 <p>Choose one of the four splits below based on your training experience and weekly availability.</p>
             </div>
-            <!-- كرت 2 -->
             <div class="fitlead-step-item">
                 <span class="fitlead-step-number">02</span>
                 <h3>Download the Excel</h3>
                 <p>The sheet shows you the framework: how many sessions per week, which functions to train each day, sets, reps, and rest.</p>
             </div>
-            <!-- كرت 3 -->
             <div class="fitlead-step-item">
                 <span class="fitlead-step-number">03</span>
                 <h3>Match Functions to Exercises</h3>
                 <p>Use the Movement Function Explorer below. For each function in your sheet, pick a top-3 exercise that matches your gym setup.</p>
             </div>
-            <!-- كرت 4 -->
             <div class="fitlead-step-item">
                 <span class="fitlead-step-number">04</span>
                 <h3>Order by Weak Points</h3>
@@ -1069,9 +1060,8 @@ font-size: 14px;
         </div>
     </section>
 </div>
-<!-- ======================================================= -->
-<!-- نهاية قسم البرامج التدريبية المطور الشفاف -->
-<!-- ======================================================= -->
+
+<section class="section" id="programs">
     
 <!-- TRAINING PROGRAMS SECTION -->
 <section class="section" id="programs">
