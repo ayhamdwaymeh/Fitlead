@@ -1186,26 +1186,16 @@ document.getElementById('add-btn').onclick = function() {
     const weights = document.querySelectorAll('.w');
     const reps = document.querySelectorAll('.r');
     let setsData = [];
-    
     for(let i=0; i<4; i++) {
-        if(weights[i].value !== "") {
-            setsData.push(`Set ${i+1}: ${weights[i].value}kg x ${reps[i].value || 0}`);
-        }
+        if(weights[i].value !== "") setsData.push(`${weights[i].value}kg x ${reps[i].value || 0}`);
     }
 
-    const log = {
-        id: Date.now(),
-        name,
-        sets: setsData,
-        note: document.getElementById('exNote').value,
-        week: document.getElementById('exWeek').value
-    };
-
+    const log = { id: Date.now(), name, sets: setsData, note: document.getElementById('exNote').value, week: document.getElementById('exWeek').value };
     let logs = JSON.parse(localStorage.getItem('fitlead_logs') || "[]");
     logs.push(log);
     localStorage.setItem('fitlead_logs', JSON.stringify(logs));
     
-    // تنظيف الحقول
+    // إعادة تعيين الحقول
     document.getElementById('exName').value = "";
     document.querySelectorAll('.w, .r').forEach(el => el.value = "");
     document.getElementById('exNote').value = "";
@@ -1231,21 +1221,17 @@ function loadLogs() {
         details.style.cssText = "margin-bottom:10px; border:1px solid #333; background:#1a1a1a; border-radius:8px; padding:10px; color:#ff2d55;";
         details.innerHTML = `<summary style="cursor:pointer; font-weight:bold;">${w}</summary>
             <div style="color:#fff; padding-top:10px; font-size:13px;">
-                ${weekLogs.map(l => `
-                    <div style="margin-bottom:15px; padding-bottom:10px; border-bottom:1px solid #333;">
-                        <div style="display:flex; justify-content:space-between;">
-                            <b style="font-size:15px; color:#ff2d55;">${l.name}</b>
-                            <button onclick="deleteLog(${l.id})" style="background:none; border:none; color:#ff4444; font-weight:bold; cursor:pointer;">X</button>
-                        </div>
-                        <div style="margin-top:5px;">${l.sets.join('<br>')}</div>
-                        ${l.note ? `<div style="margin-top:5px; font-style:italic; color:#aaa;">Note: ${l.note}</div>` : ''}
-                    </div>`).join('')}
+                ${weekLogs.map(l => `<div style="margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid #333; display:flex; justify-content:space-between;">
+                    <div><b>${l.name}</b><br>${l.sets.join(' | ')}<br><i style="color:#aaa;">${l.note}</i></div>
+                    <button onclick="deleteLog(${l.id})" style="background:none; border:none; color:#ff4444; cursor:pointer;">X</button>
+                </div>`).join('')}
             </div>`;
         container.appendChild(details);
     });
 }
 loadLogs();
 </script>
+
 
 
     
