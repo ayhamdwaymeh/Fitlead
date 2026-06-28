@@ -1157,26 +1157,14 @@ font-size: 14px;
         <h2 style="margin: 0; font-size: 20px;">WORKOUT HISTORY</h2>
     </div>
 
-    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #333;">
+    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;">
         <input type="text" id="exName" placeholder="Exercise Name" style="width:100%; padding:10px; margin-bottom:10px; background:#1a1a1a; border:1px solid #444; color:#fff; border-radius:4px;">
         
         <div id="sets-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
-            <div style="display: flex; gap: 5px;">
-                <input type="number" placeholder="W" class="set-w" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;">
-                <input type="number" placeholder="R" class="set-r" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;">
-            </div>
-            <div style="display: flex; gap: 5px;">
-                <input type="number" placeholder="W" class="set-w" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;">
-                <input type="number" placeholder="R" class="set-r" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;">
-            </div>
-            <div style="display: flex; gap: 5px;">
-                <input type="number" placeholder="W" class="set-w" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;">
-                <input type="number" placeholder="R" class="set-r" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;">
-            </div>
-            <div style="display: flex; gap: 5px;">
-                <input type="number" placeholder="W" class="set-w" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;">
-                <input type="number" placeholder="R" class="set-r" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;">
-            </div>
+            <div style="display: flex; gap: 5px;"><input type="number" placeholder="W" class="set-w" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;"><input type="number" placeholder="R" class="set-r" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;"></div>
+            <div style="display: flex; gap: 5px;"><input type="number" placeholder="W" class="set-w" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;"><input type="number" placeholder="R" class="set-r" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;"></div>
+            <div style="display: flex; gap: 5px;"><input type="number" placeholder="W" class="set-w" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;"><input type="number" placeholder="R" class="set-r" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;"></div>
+            <div style="display: flex; gap: 5px;"><input type="number" placeholder="W" class="set-w" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;"><input type="number" placeholder="R" class="set-r" style="width:50%; padding:8px; background:#1a1a1a; border:1px solid #444; color:#fff;"></div>
         </div>
 
         <textarea id="exNote" placeholder="Notes..." style="width:100%; padding:10px; margin-bottom:10px; background:#1a1a1a; border:1px solid #444; color:#fff; border-radius:4px;"></textarea>
@@ -1189,19 +1177,19 @@ font-size: 14px;
         <button id="addBtn" style="width:100%; padding:12px; background:#ff2d55; border:none; color:white; font-weight:bold; cursor:pointer;">ADD EXERCISE</button>
     </div>
 
-    <div id="weeks-display" style="margin-top: 20px;"></div>
+    <div id="weeks-display"></div>
 </section>
 
 <script>
 document.getElementById('addBtn').addEventListener('click', function() {
-    const weights = Array.from(document.querySelectorAll('.set-w')).map(i => i.value).filter(v => v);
-    const reps = Array.from(document.querySelectorAll('.set-r')).map(i => i.value).filter(v => v);
+    const weights = Array.from(document.querySelectorAll('.set-w')).map(i => i.value).filter(v => v !== "");
+    const reps = Array.from(document.querySelectorAll('.set-r')).map(i => i.value).filter(v => v !== "");
     
-    if(!document.getElementById('exName').value) return alert("Enter Name");
+    if(!document.getElementById('exName').value) return alert("Please enter exercise name");
 
     const log = {
         name: document.getElementById('exName').value,
-        data: weights.map((w, i) => `${w}kg x ${reps[i] || '-'}`),
+        data: weights.map((w, i) => `${w}kg x ${reps[i] || '0'}`),
         note: document.getElementById('exNote').value,
         week: document.getElementById('exWeek').value
     };
@@ -1219,24 +1207,29 @@ function renderLogs() {
     
     ["WEEK 1", "WEEK 2", "WEEK 3", "WEEK 4"].forEach(w => {
         const weekLogs = logs.filter(l => l.week === w);
-        container.innerHTML += `
-            <details style="margin-bottom:10px; border:1px solid #333; background:#1a1a1a; border-radius:8px;">
-                <summary style="padding:15px; color:#ff2d55; font-weight:bold; cursor:pointer;">${w}</summary>
-                <div style="padding:15px; border-top:1px solid #333;">
-                    ${weekLogs.map(l => `
+        // إنشاء القسم الخاص بكل أسبوع
+        const weekDiv = document.createElement('div');
+        weekDiv.style.marginBottom = "10px";
+        weekDiv.innerHTML = `
+            <details style="border:1px solid #333; background:#1a1a1a; border-radius:8px; padding:15px; color:#ff2d55; font-weight:bold; cursor:pointer;">
+                <summary>${w}</summary>
+                <div style="padding-top:10px; color:#fff; font-weight:normal;">
+                    ${weekLogs.length > 0 ? weekLogs.map(l => `
                         <div style="margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:5px;">
                             <div style="font-weight:bold;">${l.name}</div>
                             <div style="color:#aaa; font-size:13px;">${l.data.join(' | ')}</div>
                             <div style="color:#ff2d55; font-size:12px;">Note: ${l.note}</div>
                         </div>
-                    `).join('')}
+                    `).join('') : '<p style="font-size:12px; color:#666;">No exercises here.</p>'}
                 </div>
             </details>
         `;
+        container.appendChild(weekDiv);
     });
 }
-renderLogs();
+renderLogs(); // استدعاء الدالة عند تحميل الصفحة
 </script>
+
 
 
 
